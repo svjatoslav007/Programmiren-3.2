@@ -32,7 +32,7 @@ function getRandMatrix(cols, rows){
 }
 
 // Funktion, die wird einmal ausgefÃ¼hrt bei Programmstart
-function setup(){
+function initGame(){
 
     matrix =getRandMatrix(50,50);
     
@@ -82,11 +82,7 @@ function setup(){
         matrix[y][x]=3;
     }
   
-    createCanvas(matrix[0].length * side + 1, matrix.length * side + 1);
-    background("#acacac");
-    // noStroke();
-    frameRate(fr);
-
+    
     // Testobjekt erstellen
     // let grassObj1 = new Grass(1, 2);
     // console.log(grassObj1);
