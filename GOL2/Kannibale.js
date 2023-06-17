@@ -1,7 +1,8 @@
 
 
-    const Creature = require('./creature');
-module.exports =class Kannibale extends Creature {
+const Creature = require('./Creature');
+const random = require('./utils')
+module.exports = class Kannibale extends Creature {
     constructor(x, y) {
         //Positio
         super(x, y)
@@ -11,7 +12,7 @@ module.exports =class Kannibale extends Creature {
         this.notEaten = 5;
 
         // Sicht auf die Nachbarfelder
-       
+
     }
     newDirections() {
         this.directions = [

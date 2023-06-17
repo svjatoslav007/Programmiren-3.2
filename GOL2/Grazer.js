@@ -1,9 +1,10 @@
-const Creature = require('./creature');
-module.exports =class Grazer extends Creature {
+const Creature = require('./Creature');
+const random = require('./utils');
+module.exports = class Grazer extends Creature {
 
 
     constructor(x, y) {
-        super(x,y)
+        super(x, y)
         //Position
         this.x = x;
         this.y = y;

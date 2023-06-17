@@ -81,7 +81,7 @@ class Grass extends Creature {
 // Grasfresser
 class Grazer extends Creature {
     constructor(x, y) {
-        super(x,y)
+        super(x, y)
         //Position
         this.x = x;
         this.y = y;
@@ -434,7 +434,7 @@ class Kannibale extends Creature {
         this.notEaten = 5;
 
         // Sicht auf die Nachbarfelder
-       
+
     }
     newDirections() {
         this.directions = [

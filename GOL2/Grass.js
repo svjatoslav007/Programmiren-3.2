@@ -1,5 +1,6 @@
-const Creature = require('./creature');
-module.exports =class Grass extends Creature {
+const Creature = require('./Creature');
+const random = require('./utils')
+module.exports = class Grass extends Creature {
 
     constructor(x, y) {
         super(x, y);

@@ -1,5 +1,5 @@
-const Creature = require('./creature');
-module.exports =class Toadstool extends Creature {
+const Creature = require('./Creature');
+module.exports = class Toadstool extends Creature {
     constructor(x, y) {
         super(x, y)
     }

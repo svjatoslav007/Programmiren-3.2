@@ -1,9 +1,11 @@
-const Grass =require('./grass')
-const Grazer =require('./grazer')
-const Predator =require('./predator')
-const Kannibal =require('./kannibale')
-const Toadstool =require('./toadstool')
-let matrix = [
+const Grass = require('./Grass')
+const Grazer = require('./Grazer')
+const Predator = require('./Predator')
+const Kannibale = require('./Kannibale')
+const Toadstool = require('./Toadstool')
+const random = require('./utils');
+
+matrix = [
     [0, 0, 1, 0, 0],
     [1, 4, 0, 0, 0],
     [0, 1, 0, 3, 0],
@@ -11,26 +13,26 @@ let matrix = [
     [1, 1, 0, 5, 0],
     [1, 1, 0, 2, 0],
     [1, 1, 0, 0, 0]
- ];
+];
 
 let fr = 5;
 let side = 10;
 
 // Lebewesen
 // Liste mit Grass-Objekten
-let grassArr = [];
+grassArr = [];
 // Liste mit Grassfresser-Objekten
-let grazerArr = [];
-let predatorArr =[];
-let toadstoolArr=[];
-let kannibaleArr=[];
+grazerArr = [];
+predatorArr = [];
+toadstoolArr = [];
+kannibaleArr = [];
 
-function getRandMatrix(cols, rows){
+function getRandMatrix(cols, rows) {
     let matrix = [];
-    for(let y = 0; y < rows; y++){
+    for (let y = 0; y < rows; y++) {
         matrix[y] = []; // Zeilenarray
-        for(let x = 0; x < cols; x++){
-            matrix[y][x] = Math.round(random(0,1));
+        for (let x = 0; x < cols; x++) {
+            matrix[y][x] = Math.round(random(0, 1));
         }
     }
     return matrix;
@@ -39,7 +41,7 @@ function getRandMatrix(cols, rows){
 function initGame() {
 
 
-    matrix = getRandMatrix(50, 50);
+    // matrix = getRandMatrix(50, 50);
 
     // durch Matrix laufen und Lebewesen erstellen
     for (let y in matrix) {
@@ -69,6 +71,80 @@ function initGame() {
 
 }
 
- initGame();
- console.log(grazerArr);
-setInterval
+function updateGame() {
+
+    // alle Grassobjekte updaten
+    for (let i = 0; i < grassArr.length; i++) {
+        let grassObj = grassArr[i];
+        grassObj.mul();
+    }
+
+    for (let i = 0; i < grazerArr.length; i++) {
+        let grazerObj = grazerArr[i];
+        grazerObj.eat();
+        grazerObj.mul();
+
+    }
+    for (let i = 0; i < predatorArr.length; i++) {
+        let predatorObj = predatorArr[i];
+        predatorObj.eat();
+        predatorObj.mul();
+
+    }
+    for (let i = 0; i < toadstoolArr.length; i++) {
+        let toadstoolObj = toadstoolArr[i];
+        toadstoolObj.eat();
+
+
+    }
+    for (let i = 0; i < kannibaleArr.length; i++) {
+        let kannibaleObj = kannibaleArr[i];
+        kannibaleObj.eat_predator();
+        kannibaleObj.eat_grazer();
+        kannibaleObj.mul();
+
+
+
+    }
+    for (let y in matrix) {
+        y = parseInt(y);
+        for (let x in matrix[y]) {
+            console.log(matrix)
+            // x = parseInt(x);
+            // let farbWert = matrix[y][x];
+            // fill("#ffffff");
+            // // Wert 0 - Weiss
+            // if(farbWert === 1){
+            //     // Wert 1 - GrÃ¼n
+            //     fill("#00ff00");
+            // }else if(farbWert === 2){
+            //     // Wert 2 - Gelb
+            //     fill("#ffff00");
+            // }else if(farbWert === 3){
+            //     // Wert 3 = Rot
+            //     fill("#ff0000");
+            // }else if(farbWert === 4){
+            //     // Wert 3 = Rot
+            //     fill("#826E40");
+            // }else if(farbWert === 5){
+            //     // Wert 3 = Rot
+            //     fill("#FF6800");
+            // }
+            // rect(x * side, y *side, side, side);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+initGame()
+setInterval(function () {
+    updateGame();
+}, 1000);
+initGame();
+
