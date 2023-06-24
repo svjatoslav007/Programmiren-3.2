@@ -5,6 +5,21 @@ const Kannibale = require('./Kannibale')
 const Toadstool = require('./Toadstool')
 const random = require('./utils');
 
+const express =require('express');
+const app =express();
+let server =require('http').Server(app);
+const io =require('socket.io')(server);
+
+
+
+app.use(express.static('./'));
+app.get('/',function(req,res){
+    res.redirect('client.html')
+})
+
+
+
+
 matrix = [
     [0, 0, 1, 0, 0],
     [1, 4, 0, 0, 0],
@@ -139,6 +154,9 @@ function updateGame() {
 
 
 
+server.listen(3000,function(){
+    console.log("Server wurde gestartet und hört auf port 3000")
+
 
 
 
@@ -147,4 +165,9 @@ setInterval(function () {
     updateGame();
 }, 1000);
 initGame();
+
+})
+
+
+
 
