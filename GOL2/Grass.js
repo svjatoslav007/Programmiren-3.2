@@ -10,6 +10,7 @@ module.exports = class Grass extends Creature {
 
 
     mul() {
+        console.log("grass mull")
         // rundenzÃ¤hler erhÃ¶hen
         this.multiply++;
         // Vermehrung soll erfolgen wenn RundenzÃ¤hler 6 ist

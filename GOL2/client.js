@@ -1,31 +1,47 @@
 
-let side = 10;
+
 function main() {
-
-
     console.log("main is executed...")
     const socket = io();
-    function openMatrix (matrixData){
+
+    function openMatrix(matrixData) {
         //zeichne diese matrix
-        matrix =matrixData;
-        draw()
-     
-
-        
+        matrix = matrixData;
     }
-socket.on('send matrix', openMatrix)
 
+    function initMatrix(matrixData) {
+        matrix = matrixData;
+    //    resizeCanvas(matrix[0].length + 1, matrix.length * side + 1)
+
+    }
+    socket.on('send matrix', openMatrix);
+    socket.on('init matrix', initMatrix);
+
+    function killAll() {
+        console.log("sende kill all an den server ...")
+        socket.emit('kill all', 'Grazer')
+    }
+    let btn = document.getElementById('myGameBtn');
+    btn.onclick = killAll;
 
 
 }
+
+
 main();
-let matrix =[];
+
+let matrix = [];
+let side = 10;
+let fr = 5;
 function setup() {
-    createCanvas(1000, 1000);
+    createCanvas(50*side, 50 *side);
     background('#acacac')
-   
+    frameRate(fr)
+    //resizeCanvas(matrix[0].length + 1, matrix.length * side + 1)
 }
-function draw(){
+
+function draw() {
+    
     for (let y in matrix) {
         y = parseInt(y);
         for (let x in matrix[y]) {

@@ -6,6 +6,7 @@ const Toadstool = require('./Toadstool')
 const random = require('./utils');
 
 const express = require('express');
+const { Socket } = require('socket.io')
 const app = express();
 let server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -30,8 +31,6 @@ matrix = [
     [1, 1, 0, 0, 0]
 ];
 
-let fr = 5;
-let side = 10;
 
 // Lebewesen
 // Liste mit Grass-Objekten
@@ -56,7 +55,52 @@ function getRandMatrix(cols, rows) {
 function initGame() {
 
 
-    // matrix = getRandMatrix(50, 50);
+    matrix = getRandMatrix(50, 50);
+    for (let i = 0; i <= 30; i++) {
+        let y = i * 3;
+        if (y >= 38) { y = 26; }
+        let x = i * 2;
+        if (x >= 45) { x = 12; }
+
+        matrix[y][x] = 4;
+
+    } for (let i = 0; i <= 20; i++) {
+        let y = i * 3;
+        if (y >= 50) { y = 43; }
+        let x = i * 2;
+        if (x >= 50) { x = 20; }
+        matrix[y][x] = 2;
+    }
+
+    for (let i = 0; i <= 18; i++) {
+        let y = i * 2;
+        if (y >= 45) { y = 42; }
+        let x = i * 2;
+        if (x >= 20) { x = 45; }
+        matrix[y][x] = 5;
+
+        matrix[10][10] = 4;
+        matrix[20][25] = 4;
+        matrix[30][20] = 4;
+        matrix[40][35] = 4;
+        matrix[1][1] = 1;
+
+        matrix[48][1] = 1;
+        matrix[39][38] = 3;
+        matrix[35][34] = 3;
+        matrix[10][40] = 5;
+
+
+
+
+    }
+    for (let i = 0; i <= 20; i++) {
+        let y = i * 3;
+        if (y >= 48) y = 45;
+        let x = i * 2;
+        if (x >= 48) x = 37;
+        matrix[y][x] = 3;
+    }
 
     // durch Matrix laufen und Lebewesen erstellen
     for (let y in matrix) {
@@ -94,60 +138,43 @@ function updateGame() {
         grassObj.mul();
     }
 
-    for (let i = 0; i < grazerArr.length; i++) {
-        let grazerObj = grazerArr[i];
-        grazerObj.eat();
-        grazerObj.mul();
+    // for (let i = 0; i < grazerArr.length; i++) {
+    //     let grazerObj = grazerArr[i];
+    //     grazerObj.eat();
+    //     grazerObj.mul();
 
-    }
-    for (let i = 0; i < predatorArr.length; i++) {
-        let predatorObj = predatorArr[i];
-        predatorObj.eat();
-        predatorObj.mul();
+    // }
+    // for (let i = 0; i < predatorArr.length; i++) {
+    //     let predatorObj = predatorArr[i];
+    //     predatorObj.eat();
+    //     predatorObj.mul();
 
-    }
-    for (let i = 0; i < toadstoolArr.length; i++) {
-        let toadstoolObj = toadstoolArr[i];
-        toadstoolObj.eat();
-
-
-    }
-    for (let i = 0; i < kannibaleArr.length; i++) {
-        let kannibaleObj = kannibaleArr[i];
-        kannibaleObj.eat_predator();
-        kannibaleObj.eat_grazer();
-        kannibaleObj.mul();
+    // }
+    // for (let i = 0; i < toadstoolArr.length; i++) {
+    //     let toadstoolObj = toadstoolArr[i];
+    //     toadstoolObj.eat();
 
 
+    // }
+    // for (let i = 0; i < kannibaleArr.length; i++) {
+    //     let kannibaleObj = kannibaleArr[i];
+    //     kannibaleObj.eat_predator();
+    //     kannibaleObj.eat_grazer();
+    //     kannibaleObj.mul();
 
-    }
-    for (let y in matrix) {
-        y = parseInt(y);
-        for (let x in matrix[y]) {
-            //console.log(matrix)
-            // x = parseInt(x);
-            // let farbWert = matrix[y][x];
-            // fill("#ffffff");
-            // // Wert 0 - Weiss
-            // if(farbWert === 1){
-            //     // Wert 1 - GrÃ¼n
-            //     fill("#00ff00");
-            // }else if(farbWert === 2){
-            //     // Wert 2 - Gelb
-            //     fill("#ffff00");
-            // }else if(farbWert === 3){
-            //     // Wert 3 = Rot
-            //     fill("#ff0000");
-            // }else if(farbWert === 4){
-            //     // Wert 3 = Rot
-            //     fill("#826E40");
-            // }else if(farbWert === 5){
-            //     // Wert 3 = Rot
-            //     fill("#FF6800");
-            // }
-            // rect(x * side, y *side, side, side);
-        }
-    }
+
+
+    // }
+    // for (let y in matrix) {
+    //     y = parseInt(y);
+    //     for (let x in matrix[y]) {
+         
+    //     }
+    // }
+}
+function killAll(data){
+    console.log("client event erhalten:",data);
+    // spiellogik alle lebewesen löschen 
 }
 
 
@@ -157,27 +184,27 @@ function updateGame() {
 server.listen(3000, function () {
     console.log("Server wurde gestartet und hört auf port 3000")
 
-    
-    
-  
+
+
+
 
 })
-io.on('connection',function(socket){
+io.on('connection', function (socket) {
     console.log('ws connection established...', io.engine.clientsCount);
 
-    if(io.engine.clientsCount===1){
+    if (io.engine.clientsCount === 1) {
         initGame()
+        socket.emit('init matrix', matrix);
+        setInterval(function () {
+            updateGame();
+            console.log('send matrix')
+            io.sockets.emit('send matrix', matrix)
+        }, 1000);
 
-    setInterval(function () {
-        updateGame();
-        console.log('send matrix')
-        io.sockets.emit('send matrix',matrix)
-    }, 1000);
-  
+    } else {
+        socket.emit('init matrix', matrix);
     }
-    socket.emit('send matrix',matrix);
-
-
+    socket.on('kill all', killAll)
 })
 
 
